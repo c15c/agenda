@@ -6,10 +6,12 @@
     <title>Accruent Sales Kickoff 2025</title>
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #34495e;
-            --accent-color: #3498db;
-            --light-gray: #f5f6fa;
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --secondary-color: #6366f1;
+            --accent-color: #8b5cf6;
+            --light-gray: #f3f4f6;
+            --text-dark: #1f2937;
             --spacing: 1rem;
         }
 
@@ -22,15 +24,50 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             line-height: 1.6;
-            color: var(--primary-color);
+            color: var(--text-dark);
             background-color: var(--light-gray);
         }
 
         header {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: calc(var(--spacing) * 3);
+            text-align: center;
+        }
+
+        .date-nav {
+            background-color: white;
+            padding: var(--spacing);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing);
+        }
+
+        .date-button {
+            padding: calc(var(--spacing) * 0.75) calc(var(--spacing) * 1.5);
+            border: 2px solid var(--primary-color);
+            background-color: white;
+            color: var(--primary-color);
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+        }
+
+        .date-button:hover {
             background-color: var(--primary-color);
             color: white;
-            padding: calc(var(--spacing) * 2);
-            text-align: center;
+            transform: translateY(-1px);
+        }
+
+        .date-button.active {
+            background-color: var(--primary-color);
+            color: white;
         }
 
         .container {
@@ -41,29 +78,37 @@
 
         .day-section {
             background: white;
-            border-radius: 8px;
+            border-radius: 16px;
             margin: calc(var(--spacing) * 2) 0;
             padding: calc(var(--spacing) * 2);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            scroll-margin-top: 80px;
         }
 
         .day-header {
-            color: var(--accent-color);
+            color: var(--primary-color);
             margin-bottom: var(--spacing);
             padding-bottom: var(--spacing);
             border-bottom: 2px solid var(--light-gray);
+            font-size: 1.5rem;
         }
 
         .session {
             margin: calc(var(--spacing) * 1.5) 0;
-            padding: var(--spacing);
-            border-left: 4px solid var(--accent-color);
+            padding: calc(var(--spacing) * 1.25);
+            border-left: 4px solid var(--primary-color);
             background: var(--light-gray);
+            border-radius: 8px;
+            transition: transform 0.2s ease;
+        }
+
+        .session:hover {
+            transform: translateX(4px);
         }
 
         .session-time {
             font-weight: bold;
-            color: var(--secondary-color);
+            color: var(--primary-color);
         }
 
         .session-title {
@@ -77,11 +122,11 @@
         }
 
         .break-session {
-            border-left-color: #e74c3c;
+            border-left-color: #ec4899;
         }
 
         .meal-session {
-            border-left-color: #2ecc71;
+            border-left-color: #10b981;
         }
 
         @media (max-width: 768px) {
@@ -96,17 +141,26 @@
             .session {
                 margin: var(--spacing) 0;
             }
+
+            header {
+                padding: calc(var(--spacing) * 2);
+            }
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Accruent Sales Kickoff 2025</h1>
+        <h1>Agenda 2025</h1>
         <p>January 15-16, 2025</p>
     </header>
 
+    <nav class="date-nav">
+        <button class="date-button" onclick="scrollToDay('day1')">January 15</button>
+        <button class="date-button" onclick="scrollToDay('day2')">January 16</button>
+    </nav>
+
     <main class="container">
-        <section class="day-section">
+        <section id="day1" class="day-section">
             <h2 class="day-header">Wednesday, January 15th</h2>
             
             <div class="session meal-session">
@@ -188,7 +242,7 @@
             </div>
         </section>
 
-        <section class="day-section">
+        <section id="day2" class="day-section">
             <h2 class="day-header">Thursday, January 16th</h2>
             
             <div class="session meal-session">
@@ -260,5 +314,29 @@
             </div>
         </section>
     </main>
+
+    <script>
+        function scrollToDay(dayId) {
+            document.getElementById(dayId).scrollIntoView({ behavior: 'smooth' });
+            document.querySelectorAll('.date-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        window.addEventListener('scroll', () => {
+            const day1 = document.getElementById('day1').getBoundingClientRect();
+            const day2 = document.getElementById('day2').getBoundingClientRect();
+            const buttons = document.querySelectorAll('.date-button');
+            
+            if (day1.top <= 100 && day2.top > 100) {
+                buttons[0].classList.add('active');
+                buttons[1].classList.remove('active');
+            } else if (day2.top <= 100) {
+                buttons[0].classList.remove('active');
+                buttons[1].classList.add('active');
+            }
+        });
+    </script>
 </body>
 </html>
